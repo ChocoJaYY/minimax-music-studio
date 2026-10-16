@@ -16,7 +16,8 @@ with zipfile.ZipFile(buffer, 'w', compression=zipfile.ZIP_DEFLATED) as bundle:
         entry = zipfile.ZipInfo(name, (2026, 10, 16, 0, 0, 0))
         entry.compress_type = zipfile.ZIP_DEFLATED
         entry.external_attr = 0o644 << 16
-        bundle.writestr(entry, (ROOT / name).read_bytes())
+        # Canonical LF text keeps the embedded bundle identical on Windows/Linux.
+        bundle.writestr(entry, (ROOT / name).read_text(encoding='utf-8-sig').encode('utf-8'))
 payload = buffer.getvalue()
 encoded = base64.b64encode(payload).decode()
 digest = hashlib.sha256(payload).hexdigest()

@@ -89,7 +89,7 @@ class NotebookChecks(unittest.TestCase):
         with zipfile.ZipFile(io.BytesIO(payload)) as bundle:
             for name in bundle.namelist():
                 self.assertNotIn('..', Path(name).parts)
-                self.assertEqual(bundle.read(name), (root/name).read_bytes(), 'Rebuild the notebook after source edits.')
+                self.assertEqual(bundle.read(name), (root/name).read_text(encoding='utf-8-sig').encode('utf-8'), 'Rebuild the notebook after source edits.')
                 self.assertNotIn(b'eyJhIjoi', bundle.read(name), 'A tunnel credential may have been embedded.')
 
 
