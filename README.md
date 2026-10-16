@@ -4,6 +4,8 @@ A GPU-powered music studio for video edits. Start with ordinary words, make a fe
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ChocoJaYY/minimax-music-studio/blob/main/MiniMax_Music_Studio.ipynb)
 
+![Guided music controls; generation disabled in this layout preview](docs/studio-preview.png)
+
 ## Start in Colab
 
 1. Open the notebook above. No GitHub authorization or repository token is required. You can also download `MiniMax_Music_Studio.ipynb` and use **File → Upload notebook** in Colab.
@@ -13,6 +15,8 @@ A GPU-powered music studio for video edits. Start with ordinary words, make a fe
 5. Run **3. Download** for the results you want. Save to **D:** on your PC. Colab's runtime files disappear when its session is deleted.
 
 The GPU type, available RAM and session length depend on Colab. Setup requires a CUDA GPU and a preinstalled PyTorch version of at least 2.8. It reuses that CUDA stack instead of replacing Colab's drivers or PyTorch. Extra packages go into a separate environment. Actual compatibility/performance must be checked on the assigned runtime; see [VALIDATION.md](VALIDATION.md).
+
+If Colab says its output JavaScript cannot load, refresh your Google session and follow its cookie/verification guidance. A blank audio area does not establish that generation failed; check the saved job before retrying. Our first free T4 setup completed, but Google output/verification errors interrupted inspection of the render. The repo's local CUDA generation and file/login checks passed.
 
 ## Full web UI and your Cloudflare domain
 

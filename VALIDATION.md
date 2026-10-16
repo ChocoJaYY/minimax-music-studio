@@ -1,6 +1,6 @@
 # Validation
 
-Date: 2026-10-16. The new protected web UI passed a real CUDA generation on this Windows PC. Focused source/notebook and audio-tool checks passed. A Colab GPU run and live Cloudflare deployment remain separate checks; do not infer them from the Windows result.
+Date: 2026-10-16. The new protected web UI passed a real CUDA generation on this Windows PC. Focused source/notebook and audio-tool checks passed. Colab preparation completed on a free T4 runtime; its saved generation result still needs inspection after a Google output-display/verification error. A live Cloudflare deployment has not been performed.
 
 ## Provenance
 
@@ -16,10 +16,12 @@ The official Hugging Face Space at revision `929e40ed4e425518693ec955ced52aba5ea
 - A real call through the new password-protected Gradio action generated **4.992 seconds** from a five-second maximum, seed 67891, in **152.26 seconds** including startup. The RTX 4050 6 GB used the existing isolated CUDA 13 backend and verified model files. The original local studio had an idle MiniMax worker loaded; the cross-studio GPU lock correctly refused a second model until that idle worker was released. No editing app was stopped.
 - The initial direct resample produced one full-scale sample. The final export function was exercised on the preserved generated FLAC, using a float intermediate and **-0.18968 dB** gain protection. The resulting stereo 48 kHz PCM24 WAV passed finite/non-silent, complete decoding and zero full-scale-sample checks, peak approximately 0.98. Synthetic over-range audio and non-overwrite/source-preservation tests also passed. A second GPU generation was unnecessary for this isolated export change. Evidence: `validation/windows-smoke.json`.
 - The existing Cloudflare dashboard route was read: `colab.chocojayy.me → http://localhost:8188`, tunnel down with zero replicas. An existing Cloudflare Access sign-in page is present. No route or access policy was changed.
+- The public Colab link opened without GitHub private-repository authorization. A free **T4** runtime with **12.67 GB system RAM** was allocated. Notebook step 1 completed in about five minutes and displayed its final “Ready” message. This step asserts actual CUDA operation, installs the isolated backend, downloads/checks the pinned model files and runs the backend preflight before returning successfully. The first ten-second generation was submitted with seed 12345 through the notebook form.
+- During output display, Colab reported that the JavaScript needed for output could not load, citing expired Google login or blocked third-party cookies. After a normal refresh, the runtime reconnected, but running a plain-text inspection cell hit “Could not connect to the reCAPTCHA service.” No challenge was bypassed or browser protection disabled. Rendering completion/quality on Colab is therefore **not yet claimed**.
 
 ## Remaining checks
 
-- Actual Colab preparation/generation on its assigned GPU, CUDA stack and system RAM. The Linux worker enables disk-backed loading and disables node-result caching to reduce system-RAM pressure; this is not proof that every free runtime can fit the model.
+- Inspect the saved Colab job and exercise playback once Google's output/verification access is usable. The Linux worker enables disk-backed loading and disables node-result caching to reduce system-RAM pressure; completed preparation alone is not proof of successful audio generation or that every free runtime can fit the model.
 - Live Cloudflare end-to-end testing on an eligible paid runtime or own GPU host with secrets configured. The free account uses the in-notebook generation form. No tunnel was started from free Colab.
 - Colab notebook file upload through the browser extension was blocked because that extension does not have file-URL access. That browser setting was not changed.
 
