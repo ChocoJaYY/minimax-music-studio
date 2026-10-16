@@ -53,14 +53,19 @@ with zipfile.ZipFile(io.BytesIO(data)) as bundle:
         assert target.is_relative_to(ROOT.resolve())
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_bytes(bundle.read(name))
-subprocess.run([sys.executable, str(ROOT / 'bootstrap.py')], cwd=ROOT, check=True)
 python = Path(os.environ['MUSIC_DATA_DIR']) / 'venv/bin/python'
 def run_owned(command, input_text=None, capture=False, env=None):
     process = subprocess.Popen(command, cwd=ROOT, env=env, start_new_session=True,
         stdin=subprocess.PIPE if input_text is not None else None,
-        stdout=subprocess.PIPE if capture else None, stderr=subprocess.PIPE if capture else None, text=True)
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE if capture else subprocess.STDOUT, text=True, bufsize=1)
     try:
-        stdout, stderr = process.communicate(input_text)
+        if capture:
+            stdout, stderr = process.communicate(input_text)
+        else:
+            for line in process.stdout:
+                print(line, end='', flush=True)
+            process.wait()
+            stdout = stderr = None
         return subprocess.CompletedProcess(command, process.returncode, stdout, stderr)
     finally:
         if process.poll() is None:
@@ -70,6 +75,10 @@ def run_owned(command, input_text=None, capture=False, env=None):
             except subprocess.TimeoutExpired:
                 os.killpg(process.pid, signal.SIGKILL)
                 process.wait(timeout=10)
+print('Checking the GPU, installing the backend, then downloading model files. Progress appears below.', flush=True)
+setup_result = run_owned([sys.executable, str(ROOT / 'bootstrap.py')])
+if setup_result.returncode:
+    raise RuntimeError('Setup stopped. Read the error above, fix it, then run this cell again.')
 print('Ready. Fill in step 2 and run that cell to create music.')
 '''.replace('__PAYLOAD__', repr(encoded)).replace('__DIGEST__', digest).replace('__NAMES__', repr(names))
 
