@@ -1,0 +1,9 @@
+{
+  "status": "succeeded",
+  "anonymous_config_blocked": true,
+  "anonymous_download_blocked": true,
+  "wrong_password_blocked": true,
+  "authenticated_output_download_passed": true,
+  "private_runtime_file_blocked": true,
+  "gpu_generation_performed": false
+}

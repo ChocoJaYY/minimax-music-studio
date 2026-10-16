@@ -2,6 +2,7 @@
 import hashlib
 import json
 import os
+import re
 import signal
 import subprocess
 import time
@@ -16,9 +17,12 @@ def main():
         raise RuntimeError('Use the notebook form on free Colab. External UI is for paid Colab with positive compute units, or your own GPU host.')
     token = os.environ.get('CLOUDFLARE_TUNNEL_TOKEN', '').strip()
     if not token:
-        raise RuntimeError('Add CLOUDFLARE_TUNNEL_TOKEN to Colab Secrets and allow this notebook to read it.')
+        raise RuntimeError('Enter your tunnel token at the notebook hidden-input prompt.')
     if len(os.environ.get('MUSIC_UI_PASSWORD', '')) < 12:
-        raise RuntimeError('Add MUSIC_UI_PASSWORD to Colab Secrets: at least 12 characters.')
+        raise RuntimeError('Enter a studio password of at least 12 characters at the hidden-input prompt.')
+    hostname = os.environ.get('MUSIC_PUBLIC_HOST', '').strip()
+    if not re.fullmatch(r'(?=.{1,253}$)[a-zA-Z0-9](?:[a-zA-Z0-9.-]*[a-zA-Z0-9])?', hostname) or '.' not in hostname:
+        raise RuntimeError('Enter the hostname only, for example colab.example.com, without https:// or a path.')
     lock = json.loads((ROOT / 'runtime-lock.json').read_text())['cloudflared']
     binary = DATA / 'cloudflared'
     if not binary.exists() or hashlib.sha256(binary.read_bytes()).hexdigest() != lock['sha256']:
@@ -31,6 +35,7 @@ def main():
     # The token never enters command arguments, notebook source or app/worker env.
     ui_env = os.environ.copy()
     ui_env.pop('CLOUDFLARE_TUNNEL_TOKEN', None)
+    ui_env.pop('TUNNEL_TOKEN', None)
     tunnel_env = os.environ.copy()
     tunnel_env.pop('MUSIC_UI_PASSWORD', None)
     tunnel_env['TUNNEL_TOKEN'] = tunnel_env.pop('CLOUDFLARE_TUNNEL_TOKEN')
@@ -53,7 +58,7 @@ def main():
                 raise TimeoutError('The web UI did not become ready.')
             tunnel = subprocess.Popen([str(binary), 'tunnel', '--no-autoupdate', '--loglevel', 'warn', 'run'],
                                       env=tunnel_env, stdout=tunnel_log, stderr=subprocess.STDOUT, start_new_session=True)
-            print('Local web UI ready; Cloudflare is connecting. Open https://colab.chocojayy.me and sign in as chocojayy.', flush=True)
+            print(f"Local web UI ready; Cloudflare is connecting. Open https://{hostname} and sign in as {os.environ.get('MUSIC_UI_USER','music')}.", flush=True)
             print('This is a temporary runtime, not permanent hosting. Stop this cell to stop the app and tunnel.', flush=True)
             while ui.poll() is None and tunnel.poll() is None:
                 time.sleep(2)

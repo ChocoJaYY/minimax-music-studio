@@ -54,9 +54,9 @@ def create_ui(engine, preview=False):
         records = gr.State([])
         audio = gr.Audio(label='Listen to your music', type='filepath', interactive=False)
         with gr.Row():
-            wav = gr.File(label='For Premiere — WAV', interactive=False)
-            original = gr.File(label='Original audio — FLAC', interactive=False)
-            job = gr.File(label='Settings and checks — JSON', interactive=False)
+            wav = gr.File(label='For Premiere — WAV', interactive=False, height=90)
+            original = gr.File(label='Original audio — FLAC', interactive=False, height=90)
+            job = gr.File(label='Settings and checks — JSON', interactive=False, height=90)
         status = gr.Textbox(label='Result', interactive=False)
         chosen.change(select, [chosen, records], [audio, wav, original, job, status], api_visibility='private')
         return chosen, records, audio, wav, original, job, status

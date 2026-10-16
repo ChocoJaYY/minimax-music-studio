@@ -6,7 +6,7 @@ from gradio_client import Client
 
 root = Path(__file__).resolve().parents[1]
 password = json.loads((root/'.runtime/test-auth.json').read_text())['password']
-client = Client('http://127.0.0.1:8188', auth=('chocojayy',password), verbose=False)
+client = Client('http://127.0.0.1:8188', auth=('music',password), verbose=False)
 started = time.monotonic()
 result = client.predict('Product or app ad', 'Warm synth chords and soft crisp drums. No vocal textures.',
     'Under speech', 'Steady', 5, 'Finish naturally', True, '', 120, '', '', 67891, False,

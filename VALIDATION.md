@@ -21,4 +21,6 @@ The official Hugging Face Space at revision `929e40ed4e425518693ec955ced52aba5ea
 - Live Cloudflare end-to-end testing on an eligible paid runtime or own GPU host with secrets configured. The free account uses the in-notebook generation form. No tunnel was started from free Colab.
 - Colab notebook file upload through the browser extension was blocked because that extension does not have file-URL access. That browser setting was not changed.
 
+The repo was initially private as requested, then the user explicitly changed the requirement to public to avoid granting Colab access to private GitHub repositories. Notebook step 4 now asks for its connection details at runtime using input()/getpass(); no GitHub authorization or Colab Secrets setup is required. No tunnel credential was copied from chat into any file or commit.
+
 No human listening quality, music-theory adherence, loop continuity, or Premiere GUI import should be claimed without a separate review.

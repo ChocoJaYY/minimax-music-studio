@@ -17,5 +17,5 @@ engine = Engine()
 ui = create_ui(engine, args.preview)
 ui.queue(max_size=8, default_concurrency_limit=1).launch(
     server_name='127.0.0.1', server_port=args.port, share=False, inbrowser=False,
-    auth=None if args.preview else (os.environ.get('MUSIC_UI_USER', 'chocojayy'), password),
+    auth=None if args.preview else (os.environ.get('MUSIC_UI_USER', 'music'), password),
     allowed_paths=[str(OUTPUTS)], blocked_paths=[str(DATA)])

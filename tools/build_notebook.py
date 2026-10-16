@@ -1,4 +1,4 @@
-"""Embed only the app's public-to-this-repo sources: private GitHub needs no runtime token."""
+"""Embed only selected source files; no runtime GitHub token is needed."""
 import base64
 import hashlib
 import io
@@ -127,17 +127,21 @@ paid_colab_with_compute_units = False #@param {type:"boolean"}
 if not paid_colab_with_compute_units:
     print('Use step 2 on free Colab. Enable this only with paid Colab and a positive compute-unit balance.')
 else:
-    from google.colab import userdata
-    # Add these using Colab's key icon; allow this notebook to read both secrets.
-    # Never paste values into notebook source, GitHub, or notebook output.
+    from getpass import getpass
+    # Hidden inputs are kept out of source, saved form fields and cell output.
     web_env = os.environ.copy()
-    web_env['CLOUDFLARE_TUNNEL_TOKEN'] = userdata.get('CLOUDFLARE_TUNNEL_TOKEN')
-    web_env['MUSIC_UI_PASSWORD'] = userdata.get('MUSIC_UI_PASSWORD')
-    web_env['MUSIC_EXTERNAL_UI_ALLOWED'] = '1'
-    print('Starting the protected web UI. Stop this cell when finished.')
-    web_result = run_owned([str(python), str(ROOT / 'launch_web.py')], env=web_env)
-    if web_result.returncode:
-        raise RuntimeError('The web launcher stopped. Check the runtime logs for details.')
+    try:
+        web_env['MUSIC_PUBLIC_HOST'] = input('Your Cloudflare hostname (example: colab.example.com): ').strip()
+        web_env['MUSIC_UI_USER'] = input('Studio login name [music]: ').strip() or 'music'
+        web_env['MUSIC_UI_PASSWORD'] = getpass('Create a studio password (at least 12 characters, hidden): ')
+        web_env['CLOUDFLARE_TUNNEL_TOKEN'] = getpass('Cloudflare tunnel token (hidden): ').strip()
+        web_env['MUSIC_EXTERNAL_UI_ALLOWED'] = '1'
+        print('Starting the protected web UI. Stop this cell when finished.')
+        web_result = run_owned([str(python), str(ROOT / 'launch_web.py')], env=web_env)
+        if web_result.returncode:
+            raise RuntimeError('The web launcher stopped. Check the runtime logs for details.')
+    finally:
+        web_env.clear()
 '''
 
 notebook = {'nbformat': 4, 'nbformat_minor': 5,
@@ -149,7 +153,7 @@ Create background music for short videos. No music theory needed.
 
 **First:** choose **Runtime → Change runtime type → GPU**, then run step 1. Setup downloads about **11.1 GiB** of model weights. No paid model API or GitHub token is used.
 
-**Free Colab:** fill in step 2 and generate inside this notebook. **Paid Colab with positive compute units:** step 4 can expose the full web UI at your existing Cloudflare domain. [Google explains the restrictions here](https://research.google.com/colaboratory/faq.html).
+**Free Colab:** fill in step 2 and generate inside this notebook. **Paid Colab with positive compute units:** step 4 can expose the full web UI at your Cloudflare domain. It asks for connection details at runtime using hidden password/token input. [Google explains the restrictions here](https://research.google.com/colaboratory/faq.html).
 
 **Everyday words work:** “Warm piano and soft drums for a calm voice-over” or “Playful guitar and bouncy bass for a cooking reel.” Start with ten seconds, listen, then adjust.
 
@@ -159,9 +163,9 @@ The length is a maximum; music may end earlier. “No singing” is a creative i
 
 Repeating the same seed and settings may help repeat a result, but different hardware or software can change it. Do not run steps 2 and 4 at the same time: only one backend can own the GPU.
 '''), code(generate, True), code(download, True), markdown('''## Full web interface — optional, for later
-The GUI adds multiple choices, advanced controls, a loop tool and a saved-results browser. Your existing tunnel route should point **colab.chocojayy.me → http://localhost:8188**; the private GPU backend uses port 8189.
+The GUI adds multiple choices, advanced controls, a loop tool and a saved-results browser. Your Cloudflare tunnel route should point **your hostname → http://localhost:8188**; the private GPU backend uses port 8189.
 
-Before step 4, use the **key icon** in Colab to add **CLOUDFLARE_TUNNEL_TOKEN** and **MUSIC_UI_PASSWORD** (at least 12 characters). Allow this notebook to read both. Use the studio username **chocojayy**. Keep your existing Cloudflare Access sign-in enabled. Rotate any tunnel token that was pasted into chat before saving its replacement as a secret.
+Step 4 asks for your hostname, a login name, a studio password (at least 12 characters) and a tunnel token. Password/token entry is hidden. Values are not saved in notebook source, a form field, a file or GitHub. Keep your Cloudflare Access sign-in enabled. Rotate any tunnel token that was pasted into chat, and enter only its replacement at the hidden prompt.
 
 The domain works while this cell and runtime are running. This is not permanent hosting. No public Gradio share link, anti-idle loop or limit-bypass code is used.
 '''), code(web, True)]}

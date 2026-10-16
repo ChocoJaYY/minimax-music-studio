@@ -1,14 +1,14 @@
 # ChocoJaYY Music Studio · MiniMax Music 3
 
-A private, GPU-powered music studio for video edits. Start with ordinary words, make a few choices, and keep the track that fits your edit. Instrumental music is the default.
+A GPU-powered music studio for video edits. Start with ordinary words, make a few choices, and keep the track that fits your edit. Instrumental music is the default. The repository is public; credentials are entered only at runtime.
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ChocoJaYY/minimax-music-studio/blob/main/MiniMax_Music_Studio.ipynb)
 
 ## Start in Colab
 
-1. Open the notebook above while signed in to the GitHub account that can read this **private** repo. If Colab cannot open the private notebook, download `MiniMax_Music_Studio.ipynb` from GitHub and use **File → Upload notebook** in Colab.
+1. Open the notebook above. No GitHub authorization or repository token is required. You can also download `MiniMax_Music_Studio.ipynb` and use **File → Upload notebook** in Colab.
 2. Choose **Runtime → Change runtime type → GPU**.
-3. Run **1. Prepare the GPU**. It downloads about **11.1 GiB** of pinned model weights and checks their SHA-256 hashes. A fresh runtime needs the download again. No paid music API or GitHub token is required by the runtime: the notebook contains a checked copy of this app's small source bundle.
+3. Run **1. Prepare the GPU**. It downloads about **11.1 GiB** of pinned model weights and checks their SHA-256 hashes. A fresh runtime needs the download again. No paid music API or GitHub token is required: the notebook contains a checked copy of this app's small source bundle.
 4. On **free Colab**, use **2. Make music**. Start with ten seconds, keep **No singing** on, and run the cell. Listen to the audio inside the notebook.
 5. Run **3. Download** for the results you want. Save to **D:** on your PC. Colab's runtime files disappear when its session is deleted.
 
@@ -22,10 +22,10 @@ The full interface has guided briefs, exact tempo/key controls, optional lyrics,
 
 For the optional web launcher in notebook step 4:
 
-1. Keep the existing Cloudflare route **`colab.chocojayy.me → http://localhost:8188`** and its Cloudflare Access sign-in. The studio's private GPU backend listens on **127.0.0.1:8189**; never route the domain to it.
-2. Rotate any tunnel token previously pasted into chat using the Cloudflare dashboard. Add its replacement to **Colab Secrets** (the key icon) as **`CLOUDFLARE_TUNNEL_TOKEN`**. Do not put the value into the notebook, a command cell, GitHub, or an issue.
-3. Add a separate **`MUSIC_UI_PASSWORD`** secret of at least 12 characters. Allow this notebook to read both secrets.
-4. With paid Colab and a positive compute-unit balance, enable the step 4 checkbox and run that cell. Open **https://colab.chocojayy.me**, pass Cloudflare Access, then use studio username **`chocojayy`** and your UI password.
+1. Configure your Cloudflare route as **`your hostname → http://localhost:8188`** and keep Cloudflare Access sign-in enabled. The studio's private GPU backend listens on **127.0.0.1:8189**; never route the domain to it.
+2. Rotate any tunnel token previously pasted into chat using the Cloudflare dashboard. Do not put its replacement into notebook source, a form field, GitHub, or an issue.
+3. With paid Colab and a positive compute-unit balance, enable the step 4 checkbox and run that cell. It asks for your **hostname**, **studio login name**, **studio password** (at least 12 characters), and **tunnel token**. Password/token prompts use hidden input. No Colab Secrets setup is needed.
+4. Open the hostname you entered, pass Cloudflare Access, and use the studio login/password you chose. These values live only in runtime memory and the relevant child-process environment; the temporary environment dictionary is cleared when the launcher exits.
 5. Stop the cell when finished. The launcher stops its owned UI, GPU worker and tunnel. The hostname is a temporary connection to that runtime, not permanent hosting.
 
 The tunnel token is passed through the `cloudflared` environment, not command arguments, app/worker environment or notebook source. The studio password is excluded from the GPU worker and tunnel environments. The app binds only to localhost, requires a password, disables public Gradio share links and allows downloads only from its output folder. Existing Cloudflare Access policies are preserved; owning a domain alone does not make an app private.
@@ -53,7 +53,7 @@ Loop candidates use a supplied tempo and four beats per bar, preserve the bar le
 
 Read [AGENTS.md](AGENTS.md). The backend uses pinned official ComfyUI source and official Comfy-Org INT8/pruned MiniMax weights, the same approach tested on the local 6 GB PC. It uses CUDA inference with weight offload, disk-backed loading on Linux, and tiled audio decoding. It does not load a second prompt-writing model or use hosted MiniMax generation. Quantization can change output; this repo does not claim a quality match to the full-precision Hugging Face Space or its custom streaming implementation.
 
-The notebook embeds selected source files to work from a private repo without a runtime GitHub credential. **Rebuild it after every app change:**
+The notebook embeds selected source files so no runtime GitHub credential is needed. **Rebuild it after every app change:**
 
 ```sh
 python tools/build_notebook.py
@@ -70,7 +70,7 @@ On Colab the environment is `/content/minimax-runtime/venv/bin/python`; outputs 
 
 ## Model terms and sources
 
-This private app does not redistribute model weights. Read the original [MiniMax Music 3 Community License](https://huggingface.co/MiniMaxAI/MiniMax-Music3/blob/main/LICENSE), including its public-output disclosure, commercial-product attribution and revenue-related conditions. Conversion-repository metadata does not replace the original agreement. Technical checks cannot judge composition quality, unwanted voice-like sounds or third-party similarity; audition before publishing.
+This repo does not redistribute model weights. Read the original [MiniMax Music 3 Community License](https://huggingface.co/MiniMaxAI/MiniMax-Music3/blob/main/LICENSE), including its public-output disclosure, commercial-product attribution and revenue-related conditions. Conversion-repository metadata does not replace the original agreement. Technical checks cannot judge composition quality, unwanted voice-like sounds or third-party similarity; audition before publishing.
 
 - [Official model and inference notes](https://huggingface.co/MiniMaxAI/MiniMax-Music3)
 - [Official Space used as a UI/prompting reference](https://huggingface.co/spaces/MiniMaxAI/MiniMax-Music3)
