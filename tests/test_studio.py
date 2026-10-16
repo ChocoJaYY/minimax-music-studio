@@ -17,6 +17,20 @@ from studio.export import premiere_copy
 
 
 class InputChecks(unittest.TestCase):
+    def test_untouched_or_cleared_web_textboxes_are_optional(self):
+        fields = ('brief', 'lyrics', 'key', 'instruments', 'global_details', 'arrangement')
+        expected = make_request()
+        for field in fields:
+            with self.subTest(field=field):
+                self.assertEqual(make_request(**{field: None}), expected)
+        self.assertEqual(make_request(**dict.fromkeys(fields)), expected)
+        with self.assertRaisesRegex(ValueError, 'Add the words'):
+            make_request(instrumental=False, lyrics=None)
+        with self.assertRaisesRegex(ValueError, 'Describe your own style'):
+            make_request(style='My own style', brief=None, global_details=None)
+        with self.assertRaisesRegex(ValueError, 'plain text'):
+            make_request(brief=['invalid text input'])
+
     def test_instrumental_ignores_lyric_words_and_uses_tag(self):
         request = make_request(instrumental=True, lyrics='These words must not be sung')
         self.assertEqual(request['lyrics'], '[instrumental]')

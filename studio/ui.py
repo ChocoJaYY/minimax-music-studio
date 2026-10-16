@@ -75,7 +75,7 @@ def create_ui(engine, preview=False):
                 with gr.Row():
                     style = gr.Dropdown(list(PRESETS), value='Product or app ad', label='What are you editing?', info='Choose a starting style. You can describe something different below.')
                     role = gr.Radio(['Under speech', 'Music leads the edit'], value='Under speech', label='What should the music do?', info='Under speech keeps the musical lead more restrained. You still adjust volume in Premiere.')
-                brief = gr.Textbox(label='Describe the feeling you want', lines=3, placeholder='Example: A bright ad for a delivery app. Friendly synths, light drums, a small lift halfway through.', info='Use everyday words: warm, playful, tense, soft, futuristic. Mention sounds you want or want to avoid.')
+                brief = gr.Textbox(value='', label='Describe the feeling you want', lines=3, placeholder='Example: A bright ad for a delivery app. Friendly synths, light drums, a small lift halfway through.', info='Use everyday words: warm, playful, tense, soft, futuristic. Mention sounds you want or want to avoid.')
                 with gr.Row():
                     energy = gr.Radio(list(ENERGY), value='Steady', label='How much energy?', info='Gentle = relaxed. Steady = clear pulse. Punchy = strong rhythm for fast edits.')
                     seconds = gr.Slider(5, 90, value=30, step=1, label='Maximum length (seconds)', info='Start with 10–30 seconds. The music can finish earlier. Longer requests take more time and memory.')
@@ -83,13 +83,13 @@ def create_ui(engine, preview=False):
                     ending = gr.Dropdown(list(ENDINGS), value='Finish naturally', label='How should it end?', info='Repeatable groove makes a loop-friendly request. Use the Loop tool to trim and check the join.')
                     variations = gr.Slider(1, 4, value=1, step=1, label='How many choices?', info='Choices generate one after another to save GPU memory.')
                 instrumental = gr.Checkbox(True, label='No singing — instrumental only', info='On by default for background music. Some results may still contain voice-like sounds; listen before use.')
-                lyrics = gr.Textbox(label='Words to sing — only when singing is enabled', lines=4, placeholder='[verse]\nYour first line\n[chorus]\nYour chorus line', info='Put each section label on its own line. Leave musical instructions in the description, not in the lyrics.', visible=False)
+                lyrics = gr.Textbox(value='', label='Words to sing — only when singing is enabled', lines=4, placeholder='[verse]\nYour first line\n[chorus]\nYour chorus line', info='Put each section label on its own line. Leave musical instructions in the description, not in the lyrics.', visible=False)
                 instrumental.change(lambda checked: gr.update(visible=not checked), instrumental, lyrics, api_visibility='private')
                 with gr.Accordion('More control — optional', open=False):
-                    instruments = gr.Textbox(label='Instruments or sounds', placeholder='Example: soft piano, warm synth, deep bass, light hand percussion', info='Leave blank to follow the starting style.')
+                    instruments = gr.Textbox(value='', label='Instruments or sounds', placeholder='Example: soft piano, warm synth, deep bass, light hand percussion', info='Leave blank to follow the starting style.')
                     with gr.Row():
                         bpm = gr.Number(value=0, minimum=0, maximum=300, precision=0, label='Exact tempo — optional', info='0 lets the model choose. BPM means beats per minute: about 80 is relaxed; 120 is a steady dance pulse.')
-                        key = gr.Textbox(label='Musical key — optional', placeholder='Example: D minor', info='Leave blank if you do not know. Minor often feels darker; major often feels brighter. This is a request, not a guarantee.')
+                        key = gr.Textbox(value='', label='Musical key — optional', placeholder='Example: D minor', info='Leave blank if you do not know. Minor often feels darker; major often feels brighter. This is a request, not a guarantee.')
                     with gr.Row():
                         seed = gr.Number(value=12345, minimum=0, maximum=2147483647, precision=0, label='Variation number (seed)', info='Reuse a number with the same settings to try repeating a result. Hardware/software changes can still alter it.')
                         randomize = gr.Checkbox(True, label='Pick a new variation number each time')
@@ -98,8 +98,8 @@ def create_ui(engine, preview=False):
                         guidance = gr.Slider(1, 4, value=1.7, step=0.1, label='How strongly to follow the brief', info='1.7 is the starting value. Higher settings can sound less natural.')
                         top_k = gr.Slider(1, 100, value=50, step=1, label='Pattern variety', info='50 is the starting value. Lower values narrow the model’s choices; higher values allow more variety.')
                 with gr.Accordion('Write a detailed music brief — optional', open=False):
-                    global_details = gr.Textbox(label='Overall style and mood', lines=3, placeholder='Example: Electronic pop, 120 BPM, warm and confident. Start simple, build gently, finish cleanly.', info='When filled, this replaces the starting style and short description. Exact tempo/key above still apply.')
-                    arrangement = gr.Textbox(label='How the sounds should change', lines=3, placeholder='Example: Begin with soft synth chords. Bring in drums after two seconds. Add a bright melody halfway through.', info='Describe the beginning, middle and ending in plain English. These are creative requests; results can vary.')
+                    global_details = gr.Textbox(value='', label='Overall style and mood', lines=3, placeholder='Example: Electronic pop, 120 BPM, warm and confident. Start simple, build gently, finish cleanly.', info='When filled, this replaces the starting style and short description. Exact tempo/key above still apply.')
+                    arrangement = gr.Textbox(value='', label='How the sounds should change', lines=3, placeholder='Example: Begin with soft synth chords. Bring in drums after two seconds. Add a bright melody halfway through.', info='Describe the beginning, middle and ending in plain English. These are creative requests; results can vary.')
                 gr.Markdown('Generated music needs a listening check. The model may finish early or interpret the brief loosely. Original audio and a 48 kHz / 24-bit Premiere WAV are saved separately.')
                 button = gr.Button('Create music', variant='primary', interactive=not preview)
                 results = panel()

@@ -20,6 +20,8 @@ The first free **T4** run passed: a ten-second maximum request produced **9.996 
 
 If Colab says its output JavaScript cannot load, refresh your Google session and follow its cookie/verification guidance. A blank audio area does not establish that generation failed; check the saved job before retrying. Google display/verification warnings affected our browser playback check, but a plain-text inspection of the saved job confirmed the T4 render and technical audio checks. See [VALIDATION.md](VALIDATION.md) for evidence and limits.
 
+If an older web session shows `object of type 'NoneType' has no len()` when creating music, it is running the original empty-textbox bug. The current notebook fixes this. Stop the web launcher, reopen this notebook from GitHub, run step 1 in the same runtime to load the updated app, then restart step 4 and refresh the studio page. Existing verified model files are reused; saved music stays in `/content/minimax-output` until the runtime is deleted. Step 4 asks for the connection details again using hidden password/token input.
+
 ## Full web UI and your Cloudflare domain
 
 The full interface has guided briefs, exact tempo/key controls, optional lyrics, 1–4 sequential choices, detailed arrangement fields, a loop tool and saved results. Help text uses examples and explains music terms.

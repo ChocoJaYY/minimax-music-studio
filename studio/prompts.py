@@ -21,6 +21,13 @@ def make_request(style='Product or app ad', brief='', role='Under speech', energ
                  seconds=30, ending='Finish naturally', instrumental=True, lyrics='',
                  bpm=0, key='', instruments='', seed=12345, randomize=True,
                  steps=30, guidance=1.7, top_k=50, global_details='', arrangement=''):
+    # Untouched/cleared Gradio textboxes may arrive as None, including hidden lyrics.
+    texts = [brief, lyrics, key, instruments, global_details, arrangement]
+    if any(text is not None and not isinstance(text, str) for text in texts):
+        raise ValueError('Please use plain text for the brief, lyrics and optional music details.')
+    brief, lyrics, key, instruments, global_details, arrangement = [
+        '' if text is None else text for text in texts
+    ]
     numbers = [seconds, bpm, seed, steps, guidance, top_k]
     if not all(math.isfinite(float(x)) for x in numbers):
         raise ValueError('Please use ordinary numbers in the controls.')
