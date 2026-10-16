@@ -1,0 +1,10 @@
+{
+  "comfy_repository": "https://github.com/Comfy-Org/ComfyUI.git",
+  "comfy_revision": "bdc63e72f5ab29fde448c161db3057827148c0ef",
+  "reference_space_revision": "929e40ed4e425518693ec955ced52aba5ea6c425",
+  "cloudflared": {
+    "version": "2026.10.1",
+    "url": "https://github.com/cloudflare/cloudflared/releases/download/2026.10.1/cloudflared-linux-amd64",
+    "sha256": "3bfc539f45d2620c71debb7a86be0efa737ed5ccbad9eb85c787116900e5c586"
+  }
+}
