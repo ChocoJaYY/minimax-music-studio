@@ -16,7 +16,9 @@ A GPU-powered music studio for video edits. Start with ordinary words, make a fe
 
 The GPU type, available RAM and session length depend on Colab. Setup requires a CUDA GPU and a preinstalled PyTorch version of at least 2.8. It reuses that CUDA stack instead of replacing Colab's drivers or PyTorch. Extra packages go into a separate environment. Actual compatibility/performance must be checked on the assigned runtime; see [VALIDATION.md](VALIDATION.md).
 
-If Colab says its output JavaScript cannot load, refresh your Google session and follow its cookie/verification guidance. A blank audio area does not establish that generation failed; check the saved job before retrying. Our first free T4 setup completed, but Google output/verification errors interrupted inspection of the render. The repo's local CUDA generation and file/login checks passed.
+The first free **T4** run passed: a ten-second maximum request produced **9.996 seconds** in **115.17 seconds** from submission through export/QA, excluding backend startup and initial setup. It used the runtime's existing PyTorch 2.11.0/CUDA 13 stack and 12.67 GB system RAM. This is one observation; longer Colab tracks remain untested. Local CUDA generation, source checks and file/login checks also passed.
+
+If Colab says its output JavaScript cannot load, refresh your Google session and follow its cookie/verification guidance. A blank audio area does not establish that generation failed; check the saved job before retrying. Google display/verification warnings affected our browser playback check, but a plain-text inspection of the saved job confirmed the T4 render and technical audio checks. See [VALIDATION.md](VALIDATION.md) for evidence and limits.
 
 ## Full web UI and your Cloudflare domain
 

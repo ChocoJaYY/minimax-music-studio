@@ -1,6 +1,6 @@
 {
   "date": "2026-10-16",
-  "status": "preparation_succeeded_generation_result_pending",
+  "status": "succeeded",
   "platform": "Google Colab free managed GPU runtime",
   "gpu": "T4",
   "system_ram_gb_observed": 12.67,
@@ -8,7 +8,9 @@
   "setup_final_ready_message_observed": true,
   "setup_elapsed_observed": "about five minutes",
   "generation_submitted": {"maximum_seconds": 10, "seed": 12345, "instrumental": true},
-  "render_success_verified": false,
-  "blocker": "Google output JavaScript/login/cookie error, followed by reCAPTCHA service connectivity error during plain-text inspection",
+  "render_success_verified": true,
+  "render_record": "colab-generation.json",
+  "browser_playback_verified": false,
+  "display_issue": "Google output JavaScript/login/cookie error and reCAPTCHA service connectivity warning; plain-text saved-job inspection completed successfully",
   "tunnel_started": false
 }

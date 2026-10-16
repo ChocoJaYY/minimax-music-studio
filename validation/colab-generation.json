@@ -1,0 +1,44 @@
+{
+  "status": "succeeded",
+  "model": "MiniMax Music 3 / official Comfy INT8",
+  "request": {
+    "caption": "Global Metadata: Modern electronic instrumental, warm synth chords, rounded bass, clean crisp drums. A friendly product ad. Warm synths, light drums and a small lift halfway through. Steady medium energy with a clear pulse.\nVocal Details: Instrumental, no singing, speech, humming, choir or vocal textures.\nArrangement: Keep the lead restrained and leave room for spoken dialogue. Resolve the final phrase and leave a short natural decay.",
+    "lyrics": "[instrumental]",
+    "seconds": 10,
+    "seed": 12345,
+    "steps": 30,
+    "guidance": 1.7,
+    "top_k": 50,
+    "instrumental": true
+  },
+  "duration_is_maximum": true,
+  "device_requested": "cuda",
+  "prompt_id": "7412fae3-96d4-4692-afd1-ef436bceb8c6",
+  "original": "/content/minimax-output/20261016-133853-cf7d6233-seed12345.flac",
+  "premiere": "/content/minimax-output/20261016-133853-cf7d6233-seed12345-premiere.wav",
+  "qa": {
+    "duration_seconds": 9.996208333333334,
+    "sample_rate": 48000,
+    "channels": 2,
+    "subtype": "PCM_24",
+    "finite": true,
+    "non_silent": true,
+    "decode_passed": true,
+    "full_scale_samples": 0,
+    "peak": 0.9800000190734863,
+    "listening_review": "required"
+  },
+  "editing_export_gain_db": -0.12617,
+  "seconds_elapsed": 115.17,
+  "validation": {
+    "platform": "Google Colab free managed GPU runtime",
+    "gpu": "Tesla T4",
+    "system_ram_gb_observed": 12.67,
+    "torch": "2.11.0+cu130",
+    "cuda": "13.0",
+    "route": "Native notebook form; saved job inspected through a plain-text diagnostic cell",
+    "runtime_line": "CUDA runtime: 2.11.0+cu130 13.0 Tesla T4",
+    "listening_review": "required",
+    "browser_audio_playback_verified": false
+  }
+}
